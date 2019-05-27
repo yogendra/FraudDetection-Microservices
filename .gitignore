@@ -21,3 +21,4 @@ dump.rdb
 
 scdf/
 .cf/
+GemfireServer/startup.gfsh
