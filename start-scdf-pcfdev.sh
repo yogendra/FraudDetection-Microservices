@@ -1,5 +1,6 @@
-SCDF_BUILD_PATH=$PWD/..
 
+
+SCDF_VERSION="1.1.1.RELEASE"
 
 export SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_URL=http://api.local.pcfdev.io
 export SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_ORG=pcfdev-org
@@ -15,4 +16,13 @@ export SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_STREAM_BUILDPACK=java_buildpack
 export SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_STREAM_ENABLE_RANDOM_APP_NAME_PREFIX=false
 export MAVEN_OFFLINE=true
 
-java -jar $SCDF_BUILD_PATH/spring-cloud-dataflow-server-cloudfoundry-1.1.1.RELEASE.jar
+PROJ_DIR=$(cd `dirname $0`; pwd)
+SCDF_DIR=$PROJ_DIR/scdf
+
+SCDF_INSTALLER_URL=https://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-server-cloudfoundry/${SCDF_VERSION}/spring-cloud-dataflow-server-cloudfoundry-${SCDF_VERSION}.jar
+SCDF_INSTALLER_JAR=${SCDF_DIR}/spring-cloud-dataflow-server-cloudfoundry-${SCDF_VERSION}.jar
+
+[[ ! -d $SCDF_DIR ]] && mkdir -p $SCDF_DIR
+[[ ! -f $SCDF_INSTALLER_JAR ]] && wget -O $SCDF_INSTALLER_JAR $SCDF_INSTALLER_URL
+
+java -jar $SCDF_INSTALLER_JAR

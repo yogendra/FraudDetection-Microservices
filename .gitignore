@@ -19,3 +19,6 @@ vf.gf.*
 **/locator/**/*.*
 start-scdf-*.sh
 dump.rdb
+
+scdf/
+.cf/
