@@ -19,7 +19,7 @@ CREATE TABLE ZIP_CODES
 	(ZIP char(5), LATITUDE double precision, LONGITUDE double precision, 
 	CITY varchar, STATE char(2), COUNTY varchar, NAME varchar);
 
-COPY transaction FROM 'transaction.csv' DELIMITER ',' CSV HEADER;	
-COPY zip_codes FROM 'zip_codes_states.csv' DELIMITER ',' CSV HEADER;
-COPY pos_device FROM 'pos_device.csv' DELIMITER ',' CSV HEADER;
+\COPY transaction FROM 'transaction.csv' DELIMITER ',' CSV HEADER;	
+\COPY zip_codes FROM 'zip_codes_states.csv' DELIMITER ',' CSV HEADER;
+\COPY pos_device FROM 'pos_device.csv' DELIMITER ',' CSV HEADER;
 
