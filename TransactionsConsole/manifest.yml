@@ -1,9 +1,12 @@
 ---
 applications:
 - name: webconsole
-  memory: 512M 
+  memory: 1024M
   instances: 1
-  host: transactions-console
+  buildpacks:
+  - java_buildpack_offline
+  routes:
+  - route: yrampuria-transactions-console.apps.pcfone.io
   path: build/libs/WebConsole.jar
   services:
     - gemfire
