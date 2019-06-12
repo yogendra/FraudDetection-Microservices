@@ -3,7 +3,10 @@ applications:
 - name: clustering-service
   memory: 1024MB
   instances: 1
-  host: clustering-service
+  routes:
+    - route: "yrampuria-clustering-service.apps.pcfone.io"
+  buildpacks:
+    - java_buildpack_offline
   path: build/libs/ClusteringService-1.0.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud    

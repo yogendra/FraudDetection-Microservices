@@ -6,9 +6,10 @@ services:
     environment:
       PUBLIC_IP: ${DOCKER_MACHINE_IP}
     ports:
-      - "7575:7575"
+      - "8080:8080"
       - "10334:10334"
       - "1099:1099"
+      - "7070:7070"
     volumes:
       - locator-data:/data
 
@@ -19,7 +20,7 @@ services:
       LOCATORS: "locator[10334]"
     ports:
       - "40404:40404"
-      - "8888:8888"
+      - "8888:8080"
     volumes:
       - server-data:/data
   db:

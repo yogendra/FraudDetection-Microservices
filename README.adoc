@@ -197,3 +197,74 @@ image::fraud-detection.png[Demo Screenshot]
 
 
 
+
+
+
+= Docker + PCF
+
+Create a docker server that is reachable from you PCF environemnt. Easiest is to create a docker host on Cloud. You can also use local Docker and expose ports via servio service. This is not coverted in this. 
+
+* Create a docker host using docker-machine. Run `docker/start-docker-machine.sh`. It uses `google` as driver, if you have AWS or something else, change the script accordingly. 
+
+```
+~/project> cd docker
+~/project/docker> ./start-docker-machine.sh --google-project=myproject-id
+...
+..
+..
+..
+..
+Run
+...
+
+~/project/docekr> cd ..
+~/project
+```
+
+* Create cf services using the output from previos command
+
+```
+~/project> cf create-user-provided-service ...
+
+~/project> cf create-user-provided-service ....
+
+```
+
+* Create SCDF Service
+
+```
+~/project> cf create-service p-dataflow standard scdf
+```
+
+* After successful creation of service, run dataflow shell
+
+```
+cf dataflow-shell scdf
+Attaching shell to dataflow service scdf in org pivot-yrampuria / space demo as yrampuria@pivotal.io...
+Downloading https://repo.spring.io/libs-release/org/springframework/cloud/spring-cloud-dataflow-shell/2.0.2.RELEASE/spring-cloud-dataflow-shell-2.0.2.RELEASE.jar
+Launching dataflow shell JAR
+  ____                              ____ _                __
+ / ___| _ __  _ __(_)_ __   __ _   / ___| | ___  _   _  __| |
+ \___ \| '_ \| '__| | '_ \ / _` | | |   | |/ _ \| | | |/ _` |
+  ___) | |_) | |  | | | | | (_| | | |___| | (_) | |_| | (_| |
+ |____/| .__/|_|  |_|_| |_|\__, |  \____|_|\___/ \__,_|\__,_|
+  ____ |_|    _          __|___/                 __________
+ |  _ \  __ _| |_ __ _  |  ___| | _____      __  \ \ \ \ \ \
+ | | | |/ _` | __/ _` | | |_  | |/ _ \ \ /\ / /   \ \ \ \ \ \
+ | |_| | (_| | || (_| | |  _| | | (_) \ V  V /    / / / / / /
+ |____/ \__,_|\__\__,_| |_|   |_|\___/ \_/\_/    /_/_/_/_/_/
+
+2.0.2.RELEASE
+
+Welcome to the Spring Cloud Data Flow shell. For assistance hit TAB or type "help".
+Successfully targeted https://dataflow-eacb6b28-d95a-492e-a613-17ba31f4d31a.apps.pcfone.io
+dataflow:>
+
+```
+
+* Install `spring-cloud-stream-app-startes` in `scdf`
+```
+dataflow:> app import https://repo.spring.io/libs-release-local/org/springframework/cloud/stream/app/spring-cloud-stream-app-descriptor/Einstein.SR3/spring-cloud-stream-app-descriptor-Einstein.SR3.stream-apps-rabbit-maven
+
+dataflow:> app import https://repo.spring.io/libs-release-local/org/springframework/cloud/stream/app/spring-cloud-stream-app-descriptor/Avogadro.SR1/spring-cloud-stream-app-descriptor-Avogadro.SR1.stream-apps-rabbit-maven
+

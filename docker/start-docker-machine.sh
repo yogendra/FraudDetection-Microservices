@@ -16,6 +16,8 @@ docker-machine create \
   --google-open-port 8888/tcp \
   --google-open-port 40404/tcp \
   --google-open-port 7575/tcp \
+  --google-open-port 7070/tcp \
+  --google-open-port 8080/tcp \
   --google-open-port 1099/tcp \
   --google-open-port 10334/tcp \
   $* \
@@ -25,7 +27,7 @@ export DOCKER_MACHINE_IP=$(docker-machine ip $DOCKER_MACHINE_NAME)
 eval $(docker-machine env $DOCKER_MACHINE_NAME)
 
 echo "Running gemfire and postgredb services"
-docker-compose -f $SCRIPT_ROOT/docker-compose.yml up -d
+docker-compose -f $SCRIPT_ROOT/docker-compose.yml up -d --build --force-recreate
 
 
 cat <<EOF
@@ -35,7 +37,8 @@ You can now register gemfire and postgres as CUPS on PCF with following commands
 
 cf cups gpdb -p '{"URL":"jdbc:postgresql://$DOCKER_MACHINE_IP:5432/gemfire?user=pivotal&password=pivotal"}'
 
-cf cups gemfire -p '{"locatorHost":"$DOCKER_MACHINE_IP","locatorPort":"10334", "RestEndpoint":"http://$DOCKER_MACHINE_IP:8888/gemfire-api/v1/"}'
+cf cups gemfire -p '{"locatorHost":"$DOCKER_MACHINE_IP","locatorPort":"10334",
+"RestEndpoint":"http://$DOCKER_MACHINE_IP:8888/geode/v1/"}'
 
 Initialize Postgres database via:
 

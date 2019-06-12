@@ -22,3 +22,5 @@ dump.rdb
 scdf/
 .cf/
 GemfireServer/startup.gfsh
+.idea/sonarlint
+TransactionsConsole/out

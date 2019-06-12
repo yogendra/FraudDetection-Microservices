@@ -11,39 +11,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/clustering")
 public class Controller {
-	
-	@Autowired
-	private RedisTemplate<String,String> redis;
-	
-	private static final String key = "PMML";
-	
-    public Controller() {
-    }
-    
-    
-          
-    /**
-     * Gets the clustering model, as per last training, in PMML format.
-     * @return trained model in PMML format.
-     */
-    @RequestMapping(value="/model.pmml.xml", method=RequestMethod.GET)    
-	public String getPMMLModel(){    	
-    	String model = redis.boundValueOps(key).get();
-    	return model==null?"":model;
-    } 
-    
 
-    /**
-     * Trains the clustering algorithm
-     */
-    @RequestMapping(value="/train", method=RequestMethod.GET)    
-	public String trainAndSave(){    	
-    	String model = ClusteringService.train();
-    	redis.opsForValue().set(key, model);
-    	return model;
-    	
-    }    
-	
-    
-	 
+  private static final String key = "PMML";
+  @Autowired
+  private RedisTemplate<String, String> redis;
+
+  public Controller() {
+  }
+
+
+  /**
+   * Gets the clustering model, as per last training, in PMML format.
+   *
+   * @return trained model in PMML format.
+   */
+  @RequestMapping(value = "/model.pmml.xml", method = RequestMethod.GET)
+  public String getPMMLModel() {
+    String model = redis.boundValueOps(key)
+        .get();
+    return model == null ? "" : model;
+  }
+
+
+  /**
+   * Trains the clustering algorithm
+   */
+  @RequestMapping(value = "/train", method = RequestMethod.GET)
+  public String trainAndSave() {
+    String model = ClusteringService.train();
+    redis.opsForValue()
+        .set(key, model);
+    return model;
+
+  }
+
+
 }

@@ -9,26 +9,25 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
-@EnableAutoConfiguration 
+@EnableAutoConfiguration
 @Configuration
-public class RedisConfig extends AbstractCloudConfig{
+public class RedisConfig extends AbstractCloudConfig {
 
-	
-	
-	 @Bean
-	 public RedisConnectionFactory redisFactory() {		
-		return connectionFactory().redisConnectionFactory();
-	 }	 
-	 
-	 
-	 @Bean
-	 RedisTemplate< String, String > redis() {
-	  final RedisTemplate< String, String > template =  new RedisTemplate< String, String >();
-	  template.setKeySerializer(new StringRedisSerializer() );
-	  template.setValueSerializer(new StringRedisSerializer() );
-	  template.setConnectionFactory( redisFactory() );
-	  return template;
-	 }	 
-	 
+
+  @Bean
+  public RedisConnectionFactory redisFactory() {
+    return connectionFactory().redisConnectionFactory();
+  }
+
+
+  @Bean
+  RedisTemplate<String, String> redis() {
+    final RedisTemplate<String, String> template = new RedisTemplate<String, String>();
+    template.setKeySerializer(new StringRedisSerializer());
+    template.setValueSerializer(new StringRedisSerializer());
+    template.setConnectionFactory(redisFactory());
+    return template;
+  }
+
 
 }

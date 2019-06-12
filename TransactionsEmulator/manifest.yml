@@ -1,0 +1,16 @@
+---
+applications:
+- name: emulator
+  memory: 1024M
+  instances: 1
+  buildpacks:
+  - java_buildpack_offline
+  routes:
+  - route: yrampuria-transactions-emulator.apps.pcfone.io
+  path: build/libs/PoS_Emulator.jar
+  services:
+    - gemfire
+
+    
+  
+    
