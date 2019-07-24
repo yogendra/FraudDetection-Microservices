@@ -1,0 +1,1 @@
+curl -s "https://yrampuria-transactions-emulator.apps.pcfone.io/emulator/post-suspect?count=10000" > /tmp/ted

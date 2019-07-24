@@ -36,6 +36,7 @@ public class Emulator {
 
   private static final Logger logger = getLogger(Emulator.class);
   private final Executor executor = Executors.newFixedThreadPool(20);
+  private final Executor suspectExecutor = Executors.newFixedThreadPool(10);
   @Value("${geodeUrl}")
   private String geodeURL;
   @Value("${delayInMs}")
@@ -76,7 +77,6 @@ public class Emulator {
 
     try {
       setup();
-      postTransactions();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -94,11 +94,16 @@ public class Emulator {
 
   @Async
   public void postTransactions() {
+    postTransactions(numberOfTransactions);
+  }
+
+  @Async
+  public void postTransactions(int count) {
 
     logger.info(">>>>> RUNNING SIMULATION");
     logger.info(">>> Geode rest endpoint: {}", geodeURL);
 
-    logger.info(">>> Posting {} transactions... ", numberOfTransactions);
+    logger.info(">>> Posting {} transactions... ", count);
 
     int numberOfDevices = counties.size();
 
@@ -116,7 +121,7 @@ public class Emulator {
     df.setMaximumFractionDigits(2);
     String transactionUrl = geodeURL + RegionName.Transaction;
 
-    for (int i = 0; i < numberOfTransactions; i++) {
+    for (int i = 0; i < count; i++) {
 
       Transaction t = new Transaction();
       t.setId(Math.abs(UUID.randomUUID()
@@ -125,7 +130,8 @@ public class Emulator {
       t.setAccountId(accountId);
 
       // 90% of times, we'll transact this account from a single "home location"
-      if (Math.random() < 0.9) {
+      boolean makeSuspect = Math.random() < 0.9;
+      if (makeSuspect) {
         t.setDeviceId(getHomePoS(accountId));
       } else {
         t.setDeviceId(deviceIDs.next());
@@ -140,6 +146,7 @@ public class Emulator {
         try {
 
           restTemplate.postForObject(transactionUrl, t, Transaction.class);
+
           logger.info("Posted txn: {}", t);
         } catch (Exception e) {
           logger.error("Failed to post transaction", e);
@@ -153,6 +160,68 @@ public class Emulator {
 
     }
   }
+
+  @Async
+  public void postSuspectTransactions() {
+    postSuspectTransactions((int) (numberOfTransactions * 0.5));
+  }
+
+  @Async
+  public void postSuspectTransactions(int count) {
+
+    logger.info(">>>>> RUNNING Suspect SIMULATION");
+    logger.info(">>> Geode rest endpoint: {}", geodeURL);
+
+    logger.info(">>> Posting {} transactions... ", count);
+
+    int numberOfDevices = counties.size();
+
+    Random random = new Random();
+
+    OfLong deviceIDs = random.longs(0, numberOfDevices)
+        .iterator();
+    OfLong accountIDs = random.longs(0, numberOfAccounts)
+        .iterator();
+
+    long mean = 100; // mean value for transactions
+    long variance = 40; // variance
+
+    DecimalFormat df = new DecimalFormat();
+    df.setMaximumFractionDigits(2);
+    String transactionUrl = geodeURL + RegionName.Transaction;
+
+    for (int i = 0; i < count; i++) {
+
+      Transaction t = new Transaction();
+      t.setId(Math.abs(UUID.randomUUID()
+          .getLeastSignificantBits()));
+      long accountId = accountIDs.next();
+      t.setAccountId(accountId);
+      t.setDeviceId(deviceIDs.next());
+      t.setTimestamp(System.currentTimeMillis());
+
+      double value = Double.parseDouble(df.format(Math.abs(mean + random.nextGaussian() * variance)));
+      t.setValue(value);
+      suspectExecutor.execute(() -> {
+
+        try {
+
+          String suspectUrl = geodeURL + RegionName.Suspect;
+          restTemplate.postForObject(suspectUrl, t, Transaction.class);
+          logger.info("Posted stxn: {}", t);
+        } catch (Exception e) {
+          logger.error("Failed to post transaction", e);
+          logger.error("Check url", e);
+
+        }
+      });
+      if (i != 0 && i % 100 == 0) {
+        logger.info("Scheduled stxn {}", i);
+      }
+
+    }
+  }
+
 
   private Long getHomePoS(Long accountId) {
 

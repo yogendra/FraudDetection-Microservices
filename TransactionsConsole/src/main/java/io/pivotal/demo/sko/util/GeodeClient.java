@@ -106,8 +106,9 @@ public class GeodeClient {
     transactions = cache.getRegion(RegionName.Transaction.name());
     suspect = cache.getRegion(RegionName.Suspect.name());
 
-    transactions.registerInterest("ALL_KEYS");
-    suspect.registerInterest("ALL_KEYS");
+    transactions.registerInterestForAllKeys();
+    suspect.registerInterestForAllKeys();
+    logger.info("Finished Setup");
 
 
   }

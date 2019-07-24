@@ -1,0 +1,10 @@
+---
+applications:
+  - name: repository
+    memory: 1024M
+    instances: 1
+    buildpacks:
+      - staticfile_buildpack
+    routes:
+      - route: yrampuria-repository.apps.pcfone.io
+    path: build/libs

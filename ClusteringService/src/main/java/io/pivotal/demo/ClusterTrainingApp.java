@@ -9,8 +9,6 @@ public class ClusterTrainingApp {
   public static void main(String[] args) throws Exception {
     SpringApplication.run(ClusterTrainingApp.class, args);
   }
-
-
 }
 
 

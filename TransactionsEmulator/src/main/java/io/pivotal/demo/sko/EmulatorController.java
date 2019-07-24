@@ -4,6 +4,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -23,6 +24,30 @@ public class EmulatorController {
     emulator.postTransactions();
     return "Posting transactions";
   }
+
+  @RequestMapping(value="/post-transactions", params = {"count"})
+  @ResponseBody
+  public String postTransactions(@RequestParam("count") int count) {
+    emulator.postTransactions(count);
+    return "Posting transactions";
+  }
+
+
+  @RequestMapping("/post-suspect")
+  @ResponseBody
+  public String postSuspect() {
+    emulator.postSuspectTransactions();
+    return "Posting suspect transactions";
+  }
+
+
+  @RequestMapping(value="/post-suspect", params = {"count"})
+  @ResponseBody
+  public String postSuspect(@RequestParam("count") int count) {
+    emulator.postSuspectTransactions(count);
+    return "Posting suspect transactions";
+  }
+
 
   @RequestMapping("/setup")
   @ResponseBody
