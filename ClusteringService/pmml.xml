@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<PMML version="4.2" xmlns="http://www.dmg.org/PMML-4_2">
+<PMML version="4.2" 
+    xmlns="http://www.dmg.org/PMML-4_2">
     <Header description="k-means clustering">
         <Application name="Apache Spark MLlib" version="1.6.0"/>
-        <Timestamp>2016-06-07T17:34:35</Timestamp>
+        <Timestamp>2019-07-24T13:52:46</Timestamp>
     </Header>
     <DataDictionary numberOfFields="2">
         <DataField name="field_0" optype="continuous" dataType="double"/>
@@ -19,13 +20,13 @@
         <ClusteringField field="field_0" compareFunction="absDiff"/>
         <ClusteringField field="field_1" compareFunction="absDiff"/>
         <Cluster name="cluster_0">
-            <Array n="2" type="real">27.957910385140117 3.348743643575868</Array>
+            <Array n="2" type="real">27.69215431558873 3.349285962292165</Array>
         </Cluster>
         <Cluster name="cluster_1">
-            <Array n="2" type="real">27.964691237009532 1.7437907699218391</Array>
+            <Array n="2" type="real">32.185363805838776 2.547491802866377</Array>
         </Cluster>
         <Cluster name="cluster_2">
-            <Array n="2" type="real">32.435035836971856 2.546409086520879</Array>
+            <Array n="2" type="real">27.6988625069576 1.7440465532301355</Array>
         </Cluster>
     </ClusteringModel>
 </PMML>
