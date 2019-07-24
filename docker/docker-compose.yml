@@ -24,7 +24,7 @@ services:
     volumes:
       - server-data:/data
   db:
-    image: postgres:9.4
+    build: db
     ports:
       - "5432:5432"
     environment:
