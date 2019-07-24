@@ -24,3 +24,4 @@ scdf/
 GemfireServer/startup.gfsh
 .idea/sonarlint
 TransactionsConsole/out
+.env-docker
